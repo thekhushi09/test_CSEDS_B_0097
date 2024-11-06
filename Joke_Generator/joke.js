@@ -1,32 +1,32 @@
-const generateMemeBtn = document.querySelector(".meme-generator .generate-meme-btn");
-const memeImage=document.querySelector(".meme-generator img");
-const memeTitle=document.querySelector(".meme-generator .meme-title");
-const memeAuthor=document.querySelector(".meme-generator .meme-author");
+async function generateJoke() {
+            try {
+                const response = await fetch('https://v2.jokeapi.dev/joke/Any');
+                const data = await response.json();
 
+                let joke = '';
 
-const result=document.querySelector(".result");
+                
+                if (data.type === 'single') {
+                    joke = data.joke; 
+                } else if (data.type === 'twopart') {
+                    joke = `${data.setup} ${data.delivery}`; 
+                }
 
-const updateDetails = (category,type,delivery) => {
-    memeImage.setAttribute("src",category);
-    memeTitle.innerHTML = type;
-    memeAuthor.innerHTML = delivery;
+                
+                document.getElementById('joke').textContent = joke;
+                document.getElementById('char-count').textContent = `Character Count: ${joke.length}`;
+            } catch (error) {
+                console.error('Error fetching joke:', error);
+                document.getElementById('joke').textContent = 'Oops! Something went wrong. Try again.';
+            }
+        }
 
+        
+        function clearJoke() {
+            document.getElementById('joke').textContent = '';
+            document.getElementById('char-count').textContent = 'Character Count: 0';
+        }
 
-}
-// https://v2.jokeapi.dev/joke/Any
-const generateJoke=()=>{
-    fetch("https://v2.jokeapi.dev/joke/Any")               
-    .then( (response) => response.json())
-    .then(data => {
-            updateDetails(data.category, data.type, data.delivery)
-
-        });
-    
-
-};
-generateMemeBtn.addEventListener("click",generateJoke);
-
-result.innerHTML=generateJoke();
-
-
-
+        
+        document.getElementById('generate').addEventListener('click', generateJoke);
+        document.getElementById('clear').addEventListener('click', clearJoke);
