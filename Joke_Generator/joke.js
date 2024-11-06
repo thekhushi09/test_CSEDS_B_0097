@@ -27,3 +27,6 @@ const generateJoke=()=>{
 generateMemeBtn.addEventListener("click",generateJoke);
 
 result.innerHTML=generateJoke();
+
+
+
